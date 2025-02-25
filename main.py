@@ -1,30 +1,29 @@
-from openai import OpenAI
 import os
-
-class TextGenerator:
-    def __init__(self, openai_key, tone, topic):
-        self.client = OpenAI(api_key=openai_key)
-        self.tone = tone
-        self.topic = topic
-
-    def generate_post(self):
-        try:
-            response = self.client.chat.completions.create(
-                model="gpt-4o",  # Если нет доступа, замени на "gpt-3.5-turbo"
-                messages=[
-                    {"role": "system", "content": "Ты высококвалифицированный SMM специалист, который будет помогать в генерации текста для постов с заданной мне тематикой и заданным тоном."},
-                    {"role": "user", "content": f"Сгенерируй пост для соцсетей с темой '{self.topic}', используя тон: '{self.tone}'"}
-                ]
-            )
-            print(response.choices[0].message.content)
-        except Exception as e:
-            print(f"Ошибка: {e}")
+from generators.text_gen import TextGenerator  # Исправлено: generators и text_gen
+from generators.image_gen import ImageGenerator  # Исправлено: generators и image_gen
+from vk_publisher import VKPublisher
 
 if __name__ == '__main__':
-    # Берем ключ из секретов Replit
-    api_key = os.getenv("OPENAI_API_KEY")
-    if api_key:
-        generator = TextGenerator(openai_key=api_key, tone="Дружелюбный", topic="Уличная мода")
-        generator.generate_post()
+    # Бери ключи из секретов Replit
+    openai_key = os.getenv("OPENAI_API_KEY")
+    vk_token = os.getenv("VK_TOKEN")
+    group_id = 229537513  # Замени на ID твоей группы (без минуса)
+
+    if openai_key and vk_token and group_id:
+        # Генерация текста и описания
+        post_gen = TextGenerator(openai_key, tone="позитивный и веселый", topic="Новая коллекция кухонных ножей от компании ZeroKnifes")
+        content = post_gen.generate_post()
+        img_desc = post_gen.generate_post_image_description()
+
+        # Генерация картинки
+        img_gen = ImageGenerator(openai_key)
+        image_url = img_gen.generate_image(img_desc)
+
+        # Публикация в ВК
+        vk_pub = VKPublisher(vk_token, group_id)
+        vk_pub.publish_post(content, image_url)
+
+        print("Контент:", content)
+        print("URL картинки:", image_url)
     else:
-        print("Добавь OPENAI_API_KEY в секреты Replit!")
+        print("Добавь OPENAI_API_KEY, VK_TOKEN и укажи group_id в коде!")
