@@ -1,25 +1,25 @@
 import os
-from generators.text_gen import TextGenerator  # Исправлено: generators и text_gen
-from generators.image_gen import ImageGenerator  # Исправлено: generators и image_gen
+from generators.text_gen import TextGenerator  # Путь: generators/text_gen.py
+from generators.image_gen import ImageGenerator  # Путь: generators/image_gen.py
 from vk_publisher import VKPublisher
 
 if __name__ == '__main__':
-    # Бери ключи из секретов Replit
     openai_key = os.getenv("OPENAI_API_KEY")
     vk_token = os.getenv("VK_TOKEN")
     group_id = 229537513  # Замени на ID твоей группы (без минуса)
 
     if openai_key and vk_token and group_id:
-        # Генерация текста и описания
-        post_gen = TextGenerator(openai_key, tone="позитивный и веселый", topic="Новая коллекция кухонных ножей от компании ZeroKnifes")
+        post_gen = TextGenerator(
+            openai_key=openai_key,
+            tone="позитивный и веселый",
+            topic="Украшения от Сваровски"
+        )
         content = post_gen.generate_post()
         img_desc = post_gen.generate_post_image_description()
 
-        # Генерация картинки
         img_gen = ImageGenerator(openai_key)
         image_url = img_gen.generate_image(img_desc)
 
-        # Публикация в ВК
         vk_pub = VKPublisher(vk_token, group_id)
         vk_pub.publish_post(content, image_url)
 
