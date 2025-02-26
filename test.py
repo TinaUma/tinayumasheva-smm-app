@@ -1,1 +1,0 @@
-https://oauth.vk.com/authorize?client_id=229537513&scope=photos,wall,groups&response_type=token&v=5.236
