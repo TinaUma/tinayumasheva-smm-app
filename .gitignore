@@ -1,0 +1,11 @@
+.env
+Instance/site.db
+__pycache__
+*.pyc
+*.log
+*.tmp
+*.bak
+venv/
+env/
+.DS_Store
+.vscode/
