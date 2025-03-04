@@ -10,4 +10,4 @@
 
 Разработано Тиной Юмашевой для портфолио (2025).
 
-Демо: [tinayumasheva.pythonanywhere.com](https://tinayumasheva.pythonanywhere.com) (убери, если не хочешь публиковать).
+Демо: [tinayumasheva.pythonanywhere.com](https://tinayumasheva.pythonanywhere.com)
